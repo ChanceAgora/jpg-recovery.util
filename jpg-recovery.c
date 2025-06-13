@@ -24,11 +24,10 @@ int main(int argc, char *argv[])
     char fileName[16];
     uint8_t c[512];
     FILE *writeData = NULL;
+    int bytesRead = 0;
 
-    while (!feof(file))
+    while ((bytesRead = fread(c, 512, 1, file)))
     {
-        fread(c, 512, 1, file);
-
         // Check for jpg file signature
         if (c[0] == 0xff &&
             c[1] == 0xd8 &&
@@ -55,6 +54,7 @@ int main(int argc, char *argv[])
             fwrite(c, 512, 1, writeData);
         }
     }
+    fwrite(c, bytesRead, 1, writeData);
 
     printf("Copying completed successfully\n");
 
